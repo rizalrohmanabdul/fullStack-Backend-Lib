@@ -1,9 +1,22 @@
 const conn = require('../config/connect')
 
 module.exports = {
-  getBook: () => {
+  getBook: (limit, page) => {
+    let offset = (limit * page) - limit
     return new Promise((resolve, reject) => {
-      conn.query('SELECT  * FROM  tb_buku LEFT JOIN tb_kategori  ON tb_buku.id_kategori = tb_kategori.id_kategori', (err, result) => {
+      conn.query('SELECT  * FROM  tb_buku LEFT JOIN tb_kategori  ON tb_buku.id_kategori = tb_kategori.id_kategori LIMIT ? OFFSET ?', [limit, offset], (err, result) => {
+        if (!err) {
+          resolve(result)
+        } else {
+          reject(new Error(err))
+        }
+      })
+    })
+  },
+  searchBook: (search, limit, page) => {
+    let offset = (limit * page) - limit
+    return new Promise((resolve, reject) => {
+      conn.query(`SELECT  * FROM  tb_buku LEFT JOIN tb_kategori  ON tb_buku.id_kategori = tb_kategori.id_kategori WHERE nama_buku LIKE %${search}% LIMIT ? OFFSET ?`, [limit, offset], (err, result) => {
         if (!err) {
           resolve(result)
         } else {

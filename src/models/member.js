@@ -24,7 +24,7 @@ module.exports = {
       })
     })
   },
-  postUser: (data) => {
+  insertUser: (data) => {
     console.log(data)
     return new Promise((resolve, reject) => {
       conn.query('INSERT INTO tb_user SET ?', data, (err, result) => {

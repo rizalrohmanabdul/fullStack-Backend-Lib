@@ -8,9 +8,10 @@ const app = express()
 const port = process.env.SERVER_PORT || 3333
 
 const categoryRoute = require('./src/routes/category')
-const userRoute = require('./src/routes/borrower')
+const userRoute = require('./src/routes/member')
 const bookRoute     = require('./src/routes/book')
 const borrowingRoute = require('./src/routes/borrowing')
+const donateRoute = require('./src/routes/donate')
 const authuserRoute = require('./src/routes/authuser')
 
 const whitelist = process.env.WHITELIST
@@ -30,8 +31,9 @@ const corsOptions = (req, callback) => {
   }
 }
 
+
 app.use(cors());
-app.options('*', cors(corsOptions))
+// app.options('*', cors(corsOptions))
 app.use(xssFilter())
 app.use(logger('dev'))
 
@@ -43,6 +45,7 @@ app.use(bodyParser.json()) // Body parse json
 app.use(bodyParser.urlencoded({ extended: false })) // body type
 app.use(`/book`, bookRoute)
 app.use(`/category`, categoryRoute) 
-app.use(`/borrower`, userRoute)
+app.use(`/member`, userRoute)
 app.use('/borrowing', borrowingRoute)
+app.use('/donate', donateRoute)
 app.use('/authuser', authuserRoute)

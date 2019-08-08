@@ -1,4 +1,4 @@
-const userModel = require('../models/borrower')
+const userModel = require('../models/member')
 const help = require('../helpers/helpers')
 
 const jwt = require('jsonwebtoken')
@@ -29,6 +29,7 @@ module.exports = {
       status: 1,
       level_user: 'peminjam'
     }
+    console.log('coba', data)
 
     // userModel.getByEmail(data.email)
     //   .then(resultUser => {
@@ -131,10 +132,19 @@ module.exports = {
   },
   updateUser: (req, res) => {
     const id_ktp = req.params.id_ktp
+    const salt = help.generateSalt(18)
+    const passwordHash = help.setPassword(req.body.password, salt)
     const data = {
-      id_ktp: req.body.id_User,
+      id_ktp: req.body.id_ktp,
       nama_peminjam: req.body.nama_peminjam,
-      alamat: req.body.alamat
+      jk: req.body.jk,
+      alamat: req.body.alamat,
+      email: req.body.email,
+      password: passwordHash.passwordHash,
+      salt: passwordHash.salt,
+      token: '',
+      status: 1,
+      level_user: req.body.level_user
     }
     userModel
       .updateUser(id_ktp, data)
